@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>My Crud</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--Angular Libreria-->
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+  </head>
+  <body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+      </hr>
+      <button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#exampleModalCenter">Add new</button>
+
+      <!-- <h3>All users</h2> -->
+      <span class="clearfix"></span>
+      <div>
+		<strong style="font-size: 36px; text-align: right;">List candidate</strong>
+	  </div>
+      <hr>
+      <!--Alerta-->
+      <div class="alert alert-info alert-dismissible" role="alert" ng-if="message">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="clearMessage()">&times;</a>
+      {{message}}
+      </div>
+
+<!--tabla-->
+<table class="table table-hover">
+  <thead>
+  	 <!--Titulo de la tabla-->
+		<div class="row" style="text-align: right;">
+			<div class="form-group pull-rigth">
+			<label><strong>Search</strong></label>
+			<label>
+				<input type="text" class="form-control" ng-model="searchText"></input>
+			</label>		
+			</div>
+		</div>
+    <tr>
+      <th scope="col">Identification Card</th>
+      <th scope="col">Username</th>
+      <th scope="col">LastName</th>
+      <th scope="col">DateBirthday</th>
+      <th scope="col">Locked</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="user in users | filter: searchText">
+      <th scope="row">{{$index+1}}</th>
+      <td>{{user.username}}</td>
+      <td>{{user.lastname}}</td>
+      <td>{{user.datebirthday}}</td>
+      <td>{{user.locked}}</td>
+       <td><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenterEdit" ng-click="selectUser(user)">Edit</button></td>
+       <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenterDelete" ng-click="selectUser(user)">Delete</button></td>
+		<!--Validación a la tabla si hay Usuarios para mostrar-->
+       <tr ng-if="!users || users.length == 0">
+		<td colspan="15" style="text-align: center;">
+			<strong>No hay Datos para Mostrar</strong>
+		</td>
+	   </tr>
+	   <!--Fin de la validación-->
+    </tr>
+    
+  </tbody>
+</table>
+<!--Fin de la tabla-->
+
+
+    </div>
+    <!-- Button trigger modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle" style="color: black"><strong>New User Registration</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  <!--Contenido Formulario Agregar Nuevo-->
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Username</label>
+    <input type="text" class="form-control" ng-model="newUser.username">
+  </div>
+
+   <div class="form-group">
+    <label for="exampleFormControlInput1">LastName</label>
+    <input type="text" class="form-control" ng-model="newUser.lastname">
+  </div>
+
+<div class="form-group">
+    <label for="exampleFormControlInput1">Date Birthday</label>
+    <input type="date" class="form-control" id="" ng-model="newUser.birthday">
+  </div>
+
+<div class="form-group">
+    <label for="exampleFormControlInput1">Locked</label>
+    <input type="checkbox" ng-readonly="checked" class="form-control" id="" ng-model="newUser.locked"/>
+    <tr ng-if="!users || users == true">
+	   </tr>
+	   <tr ng-disabled="users == true">
+	   	
+	   </tr>
+	   <!--Fin de la validación-->
+    </tr>
+  </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" ng-click="saveUser()" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Fin del modal-->
+
+  <!-- Button trigger modal Editar-->
+<div class="modal fade" id="exampleModalCenterEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle" style="color: black"><strong>Edit This User</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <!--Contenido Formulario Editar-->
+      <form>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Username</label>
+    <input type="text" class="form-control" ng-model="clickedUser.username">
+  </div>
+   <div class="form-group">
+    <label for="exampleFormControlInput1">LastName</label>
+    <input type="text" class="form-control" ng-model="clickedUser.lastname">
+  </div>
+</form>
+<div class="form-group">
+    <label for="exampleFormControlInput1">Date Birthday</label>
+    <input type="date" class="form-control"  ng-model="clickedUser.datebirthday">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Locked</label>
+    <input type="checkbox" ng-readonly="checked" class="form-control" ng-model="clickedUser.locked"/>
+    <tr ng-if="!users || users == false">
+	   </tr>
+	   <!--Fin de la validación-->
+    </tr>
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" ng-click="updateUser()" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Fin del modal-->
+
+<!--Eliminar-->
+ <!-- Button trigger modal Eliminar-->
+<div class="modal fade" id="exampleModalCenterDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle" style="color: black"><strong>Are You Sure?</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <strong style="color: black;">
+        You are going to delete <strong style="color: red">{{clickedUser.username}}</strong>. All information...
+      </strong>
+      <!--Contenido Formulario Agregar Nuevo-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="deleteUser()">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Fin del modal-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
